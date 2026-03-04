@@ -65,7 +65,7 @@ export default function StepResult() {
     }, []);
 
     const handleShare = async () => {
-        if (navigator.share) {
+        if ('share' in navigator) {
             try {
                 await navigator.share({
                     title: "Bói Chỉ Tay AI - Kết Quả Phân Tích",
@@ -136,7 +136,7 @@ export default function StepResult() {
                     <Download className="w-4 h-4" /> Xuất PDF
                 </motion.button>
 
-                {typeof navigator !== "undefined" && navigator.share && (
+                {typeof navigator !== "undefined" && 'share' in navigator && (
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
