@@ -18,10 +18,11 @@ export default function Home() {
 
   // Show settings on first visit if no key stored
   useEffect(() => {
-    if (!apiKey) {
+    const encryptedKey = localStorage.getItem("palm_api_key");
+    if (!encryptedKey) {
       setShowSettings(true);
     }
-  }, [apiKey, setShowSettings]);
+  }, [setShowSettings]);
 
   const stepComponent = useMemo(() => {
     switch (currentStep) {
