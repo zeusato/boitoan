@@ -9,6 +9,7 @@ const FOCUS_LABELS: Record<FocusArea, string> = {
 };
 
 function buildPrompt(
+    gender: "male" | "female",
     dominantHand: "left" | "right",
     focusArea: FocusArea,
     userQuestion: string
@@ -21,9 +22,12 @@ function buildPrompt(
 
     let prompt = `Mày là chuyên gia xem chỉ tay (Palmistry Expert) cấp cao với 20 năm kinh nghiệm.
 
-Người dùng đã chọn tay thuận là: ${dominantHand === "right" ? "Tay phải" : "Tay trái"}.
+Thông tin khách hàng:
+- Giới tính: ${gender === "male" ? "Nam" : "Nữ"}
+- Tay thuận: ${dominantHand === "right" ? "Tay phải" : "Tay trái"}.
 
 Logic phân tích:
+- Áp dụng nguyên tắc "Nam tả, Nữ hữu" sao cho phù hợp, dựa vào giới tính ${gender === "male" ? "Nam" : "Nữ"} này.
 - ${nonDominantLabel.charAt(0).toUpperCase() + nonDominantLabel.slice(1)} (tay KHÔNG thuận) đại diện cho vận mệnh bẩm sinh, tiềm năng sẵn có từ khi sinh ra.
 - ${dominantLabel.charAt(0).toUpperCase() + dominantLabel.slice(1)} (tay thuận) đại diện cho thực tại, nỗ lực và những thay đổi hiện tại do bản thân tạo nên.
 
@@ -87,6 +91,7 @@ export async function analyzePalm(
     apiKey: string,
     leftHandBase64: string,
     rightHandBase64: string,
+    gender: "male" | "female",
     dominantHand: "left" | "right",
     focusArea: FocusArea,
     userQuestion: string
@@ -101,7 +106,7 @@ export async function analyzePalm(
         "gemini-2.0-flash",
     ];
 
-    const prompt = buildPrompt(dominantHand, focusArea, userQuestion);
+    const prompt = buildPrompt(gender, dominantHand, focusArea, userQuestion);
 
     // Strip base64 prefix if present
     const cleanBase64 = (b64: string) => b64.replace(/^data:image\/\w+;base64,/, "");

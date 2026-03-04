@@ -14,7 +14,7 @@ import InstallPrompt from "@/components/InstallPrompt";
 import StarsBackground from "@/components/StarsBackground";
 
 export default function Home() {
-  const { currentStep, showSettings, apiKey, setShowSettings } = usePalmStore();
+  const { currentStep, showSettings, setShowSettings } = usePalmStore();
 
   // Show settings on first visit if no key stored
   useEffect(() => {

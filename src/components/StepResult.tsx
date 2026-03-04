@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
@@ -30,14 +31,15 @@ export default function StepResult() {
 
         try {
             const canvas = await html2canvas(el, {
-                scale: 4, // Tăng nét cho PDF
+                scale: 2, // Giảm từ 4 xuống 2 để nhẹ file
                 backgroundColor: "#0f0520",
                 useCORS: true,
                 logging: false,
             });
 
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPDF("p", "mm", "a4");
+            // Chuyển sang JPEG chất lượng 0.8 để giảm dung lượng cực lớn của PNG
+            const imgData = canvas.toDataURL("image/jpeg", 0.8);
+            const pdf = new jsPDF("p", "mm", "a4", true); // Bật nén mặc định
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const imgWidth = pdfWidth;
@@ -46,13 +48,14 @@ export default function StepResult() {
             let heightLeft = imgHeight;
             let position = 0;
 
-            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            // Sử dụng "JPEG" và nén "FAST"
+            pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
             heightLeft -= pdfHeight;
 
             while (heightLeft > 0) {
                 position = heightLeft - imgHeight;
                 pdf.addPage();
-                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
                 heightLeft -= pdfHeight;
             }
 

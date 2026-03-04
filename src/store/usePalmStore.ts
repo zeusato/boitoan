@@ -13,7 +13,9 @@ interface PalmState {
     showSettings: boolean;
     setShowSettings: (show: boolean) => void;
 
-    // Hand selection
+    // Hand & Gender selection
+    gender: "male" | "female" | null;
+    setGender: (gender: "male" | "female") => void;
     dominantHand: "left" | "right" | null;
     setDominantHand: (hand: "left" | "right") => void;
 
@@ -64,6 +66,8 @@ export const usePalmStore = create<PalmState>((set) => ({
     showSettings: false,
     setShowSettings: (show) => set({ showSettings: show }),
 
+    gender: null,
+    setGender: (gender) => set({ gender }),
     dominantHand: null,
     setDominantHand: (hand) => set({ dominantHand: hand }),
 
@@ -85,6 +89,7 @@ export const usePalmStore = create<PalmState>((set) => ({
     reset: () =>
         set({
             currentStep: 0,
+            gender: null,
             dominantHand: null,
             leftHandImage: null,
             rightHandImage: null,

@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useRef, useCallback, useState } from "react";
 import Webcam from "react-webcam";
@@ -6,6 +7,7 @@ import { motion } from "framer-motion";
 import { usePalmStore } from "@/store/usePalmStore";
 import { Camera, RotateCcw, ArrowLeft, ArrowRight } from "lucide-react";
 import HandOverlaySVG from "./HandOverlaySVG";
+import { compressImage } from "@/lib/image-utils";
 
 interface StepCameraProps {
     hand: "left" | "right";
@@ -30,14 +32,17 @@ export default function StepCamera({ hand }: StepCameraProps) {
         facingMode,
     };
 
-    const capture = useCallback(() => {
+    const capture = useCallback(async () => {
         const imageSrc = webcamRef.current?.getScreenshot();
         if (imageSrc) {
-            setCaptured(imageSrc);
+            // Nén ảnh ngay lập tức trước khi lưu
+            const compressed = await compressImage(imageSrc, 1200, 1200, 0.8);
+
+            setCaptured(compressed);
             if (isLeft) {
-                setLeftHandImage(imageSrc);
+                setLeftHandImage(compressed);
             } else {
-                setRightHandImage(imageSrc);
+                setRightHandImage(compressed);
             }
         }
     }, [isLeft, setLeftHandImage, setRightHandImage]);

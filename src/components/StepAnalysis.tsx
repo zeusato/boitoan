@@ -10,6 +10,7 @@ export default function StepAnalysis() {
         apiKey,
         leftHandImage,
         rightHandImage,
+        gender,
         dominantHand,
         focusArea,
         userQuestion,
@@ -22,7 +23,7 @@ export default function StepAnalysis() {
         let cancelled = false;
 
         async function run() {
-            if (!apiKey || !leftHandImage || !rightHandImage || !dominantHand) {
+            if (!apiKey || !leftHandImage || !rightHandImage || !dominantHand || !gender) {
                 setStep(0);
                 return;
             }
@@ -32,6 +33,7 @@ export default function StepAnalysis() {
                     apiKey,
                     leftHandImage,
                     rightHandImage,
+                    gender,
                     dominantHand,
                     focusArea,
                     userQuestion
