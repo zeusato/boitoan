@@ -41,7 +41,9 @@ Yêu cầu phân tích:
 2. Dành tối thiểu **60%** dung lượng phân tích để xoáy sâu vào lĩnh vực trọng tâm: **${focusLabel}**.
 ${userQuestion ? `3. Trả lời trực diện câu hỏi "${userQuestion}" dựa trên các dấu hiệu từ chỉ tay.\n` : ""}
 ${focusArea === "career" ? "4. Thêm mục đặc biệt: **💰 Dự đoán Tài chính & Cơ hội Thăng tiến**.\n" : ""}${focusArea === "love" ? "4. Thêm mục đặc biệt: **💕 Chỉ số Tương thích & Lời khuyên cho Mối quan hệ**.\n" : ""}${focusArea === "health" ? "4. Thêm mục đặc biệt: **🌿 Điểm Năng lượng & Lời khuyên Sức khỏe**.\n" : ""}
-Tone giọng: Huyền bí, sâu sắc nhưng tích cực, mang tính định hướng tương lai. Ngôn ngữ tiếng Việt tự nhiên, truyền cảm hứng.
+Tone giọng: Khách quan, trung thực, tinh tế nhưng ĐI THẲNG VÀO VẤN ĐỀ. 
+- QUAN TRỌNG: TUYỆT ĐỐI KHÔNG NỊNH BỢ người dùng, KHÔNG sáo rỗng hay thêm thắt những lời tốt đẹp nếu chỉ tay không thể hiện điều đó.
+- CƠ SỞ LUẬN GIẢI: Mọi nhận định, dự đoán đều PHẢI nói rõ dựa trên đặc điểm cụ thể nào của bàn tay (Ví dụ: "Đường Tâm Đạo đứt đoạn cho thấy...", "Gò Thái Dương xẹp cho thấy..."). Bắt buộc phải miêu tả hình dáng/tình trạng của đường chỉ tay/gò bàn tay trước khi đưa ra kết luận.
 
 Định dạng trả về: Markdown sạch sẽ với các tiêu đề rõ ràng, sử dụng emoji phù hợp. Phần trọng tâm phải được bôi đậm hoặc đặt trong blockquote nổi bật.
 
