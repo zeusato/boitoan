@@ -8,9 +8,7 @@ import { Download, RotateCcw, Share2 } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { QRCodeSVG } from "qrcode.react";
-
 const PLACEHOLDER_URL = "https://boitoan.vercel.app";
-
 export default function StepResult() {
     const { analysisResult, leftHandImage, rightHandImage, dominantHand, focusArea, reset } =
         usePalmStore();
@@ -32,7 +30,7 @@ export default function StepResult() {
 
         try {
             const canvas = await html2canvas(el, {
-                scale: 2,
+                scale: 4, // Tăng nét cho PDF
                 backgroundColor: "#0f0520",
                 useCORS: true,
                 logging: false,
