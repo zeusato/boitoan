@@ -39,25 +39,17 @@ export default function StepResult() {
 
             // Chuyển sang JPEG chất lượng 0.8 để giảm dung lượng cực lớn của PNG
             const imgData = canvas.toDataURL("image/jpeg", 0.8);
-            const pdf = new jsPDF("p", "mm", "a4", true); // Bật nén mặc định
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pdfWidth;
-            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            let heightLeft = imgHeight;
-            let position = 0;
+            // Cố định chiều rộng tương đương khổ A4 (210mm) để dễ nhìn
+            const pdfWidth = 210;
+            // Tính toán ra chiều cao dựa theo tỉ lệ ảnh chụp lúc render canvas
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            // Sử dụng "JPEG" và nén "FAST"
-            pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
-            heightLeft -= pdfHeight;
+            // Khởi tạo trang PDF với mảng format [width, height] bằng đúng kích thước nội dung để tạo ra một trang đơn xuyên suốt
+            const pdf = new jsPDF("p", "mm", [pdfWidth, pdfHeight], true);
 
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
-                heightLeft -= pdfHeight;
-            }
+            // Chèn ảnh vào toạ độ x=0, y=0 vì giờ đây toàn bộ ảnh vừa khít 1 trang
+            pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
             pdf.save("ban-do-van-menh.pdf");
         } finally {
@@ -66,16 +58,58 @@ export default function StepResult() {
     }, []);
 
     const handleShare = async () => {
-        if ('share' in navigator) {
-            try {
-                await navigator.share({
+        if (!('share' in navigator)) {
+            alert("Trình duyệt của bạn không hỗ trợ tính năng chia sẻ.");
+            return;
+        }
+
+        if (!pdfRef.current) return;
+        const el = pdfRef.current;
+        el.style.display = "block";
+
+        // Đợi một chút để render DOM
+        await new Promise((r) => setTimeout(r, 300));
+
+        try {
+            const canvas = await html2canvas(el, {
+                scale: 2,
+                backgroundColor: "#0f0520",
+                useCORS: true,
+                logging: false,
+            });
+
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    alert("Có lỗi xảy ra khi tạo ảnh chia sẻ.");
+                    return;
+                }
+
+                const file = new File([blob], "ban-do-van-menh.jpg", { type: "image/jpeg" });
+
+                const shareData = {
                     title: "Bói Chỉ Tay AI - Kết Quả Phân Tích",
                     text: "Xem kết quả phân tích vận mệnh qua đường chỉ tay của tôi!",
-                    url: PLACEHOLDER_URL,
-                });
-            } catch {
-                // User cancelled
-            }
+                    files: [file],
+                };
+
+                // Kiểm tra xem trình duyệt có hỗ trợ chia sẻ file không
+                if (navigator.canShare && navigator.canShare(shareData)) {
+                    try {
+                        await navigator.share(shareData);
+                    } catch (error) {
+                        console.error("Lỗi khi chia sẻ:", error);
+                        // User cancelled hoặc lỗi khác
+                    }
+                } else {
+                    alert("Thiết bị của bạn không hỗ trợ chia sẻ File dạng ảnh. Vui lòng tải PDF về máy thay thế.");
+                }
+            }, "image/jpeg", 0.8);
+
+        } catch (error) {
+            console.error("Lỗi tạo canvas khi share:", error);
+            alert("Có lỗi xảy ra khi chuẩn bị ảnh chia sẻ.");
+        } finally {
+            el.style.display = "none";
         }
     };
 
