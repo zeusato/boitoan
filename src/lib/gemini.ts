@@ -20,7 +20,7 @@ function buildPrompt(
     const dominantLabel =
         dominantHand === "right" ? "tay phải" : "tay trái";
 
-    let prompt = `Mày là chuyên gia xem chỉ tay (Palmistry Expert) cấp cao với 20 năm kinh nghiệm.
+    const prompt = `Mày là chuyên gia xem chỉ tay (Palmistry Expert) cấp cao với 20 năm kinh nghiệm.
 
 Thông tin khách hàng:
 - Giới tính: ${gender === "male" ? "Nam" : "Nữ"} | Tay thuận: ${dominantHand === "right" ? "Tay phải" : "Tay trái"}

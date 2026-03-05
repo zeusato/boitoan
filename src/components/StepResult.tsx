@@ -4,16 +4,30 @@
 import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
-import { usePalmStore } from "@/store/usePalmStore";
-import { Download, RotateCcw, Share2 } from "lucide-react";
+import { usePalmStore, type FocusArea } from "@/store/usePalmStore";
+import { Download, RotateCcw, Share2, Briefcase, Heart, Activity, Compass } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { QRCodeSVG } from "qrcode.react";
 const PLACEHOLDER_URL = "https://boitoan.vercel.app";
+
+const FOCUS_OPTIONS: { value: FocusArea; label: string; icon: React.ReactNode; desc: string }[] = [
+    { value: "general", label: "Tổng Quan", icon: <Compass className="w-5 h-5" />, desc: "Xem tất cả phương diện" },
+    { value: "career", label: "Sự Nghiệp", icon: <Briefcase className="w-5 h-5" />, desc: "Tài chính & Thăng tiến" },
+    { value: "love", label: "Tình Duyên", icon: <Heart className="w-5 h-5" />, desc: "Hôn nhân & Quan hệ" },
+    { value: "health", label: "Sức Khỏe", icon: <Activity className="w-5 h-5" />, desc: "Năng lượng & Thể chất" },
+];
+
 export default function StepResult() {
-    const { analysisResult, leftHandImage, rightHandImage, dominantHand, focusArea, reset } =
+    const { analysisResult, leftHandImage, rightHandImage, dominantHand, focusArea, reset, setFocusArea, setUserQuestion, setStep } =
         usePalmStore();
     const pdfRef = useRef<HTMLDivElement>(null);
+
+    const handleReAnalyze = (area: FocusArea) => {
+        setFocusArea(area);
+        setUserQuestion(""); // Reset question
+        setStep(5); // Go back to analysis step
+    };
 
     const focusLabels: Record<string, string> = {
         general: "Tổng Quan",
@@ -158,6 +172,32 @@ export default function StepResult() {
             {/* Analysis Content */}
             <div className="glass-card p-5 w-full mb-6 analysis-content">
                 <ReactMarkdown>{analysisResult || ""}</ReactMarkdown>
+            </div>
+
+            {/* Alternative Scopes */}
+            <div className="w-full mb-8 max-w-sm">
+                <div className="flex items-center gap-2 mb-4 justify-center">
+                    <div className="h-px bg-mystic-violet/30 flex-1" />
+                    <p className="text-center text-mystic-muted text-sm font-medium">
+                        Khám phá phương diện khác
+                    </p>
+                    <div className="h-px bg-mystic-violet/30 flex-1" />
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                    {FOCUS_OPTIONS.filter((opt) => opt.value !== focusArea).map((opt) => (
+                        <motion.button
+                            key={opt.value}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => handleReAnalyze(opt.value)}
+                            className="p-3 rounded-xl flex flex-col items-center gap-1 text-center glass-card text-mystic-muted hover:text-gold hover:glow-gold transition-all cursor-pointer"
+                        >
+                            {opt.icon}
+                            <span className="font-semibold text-xs whitespace-nowrap">{opt.label}</span>
+                        </motion.button>
+                    ))}
+                </div>
             </div>
 
             {/* Action Buttons */}
