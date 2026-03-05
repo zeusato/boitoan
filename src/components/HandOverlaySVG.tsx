@@ -15,7 +15,7 @@ export default function HandOverlaySVG({ mirrored = false }: { mirrored?: boolea
             <path
                 fill="none"
                 stroke="rgba(212, 175, 55, 0.6)"
-                strokeWidth="0.15"  /* Mảnh đi 1/2 so với bản test lúc nãy (0.3) */
+                strokeWidth="0.05"  /* Mảnh đi 1/2 so với bản test lúc nãy (0.3) */
                 strokeDasharray="0.5 0.3" /* Nét đứt nhỏ cho phù hợp tỷ lệ viewBox 24x32 */
                 d="M0.286,18.651l4.387,8.082C4.765,26.948,7.015,32,15.256,32c8.145,0,8.738-8.684,8.744-8.8V7.659
                 c0-1.431-1.085-2.595-2.497-2.595C20.91,5.064,20,5.278,20,5.622v-1.47c0-1.431-1.186-2.595-2.564-2.595
